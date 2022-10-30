@@ -31,6 +31,7 @@ struct MovieCardView: View {
                 .resizable()
                 .scaledToFit()
         }
+        .frame(height: 100)
     }
 }
 

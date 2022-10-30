@@ -9,7 +9,8 @@ import Foundation
 
 class Constants {
     struct URL {
-        static let requestURL = "https://api.themoviedb.org/3/movie/popular?api_key=\(API.apiKey)&language=\(API.languageLocale)&page=\(API.pageValue)"
+        static let popular = "https://api.themoviedb.org/3/movie/popular?api_key=\(API.apiKey)&language=\(API.languageLocale)&page=\(API.pageValue)"
+        static let topRated = "https://api.themoviedb.org/3/movie/top_rated?api_key=\(API.apiKey)&language=\(API.languageLocale)&page=\(API.pageValue)"
         static let baseImageURL = "https://image.tmdb.org/t/p/"
     }
     

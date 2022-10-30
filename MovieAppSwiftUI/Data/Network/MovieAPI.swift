@@ -8,17 +8,18 @@
 import Foundation
 import Alamofire
 
-typealias MovieAPIResponse = (Swift.Result<[Movie]?, DataError>) -> Void
+typealias MovieAPIPopularResponse = (Swift.Result<[Movie]?, DataError>) -> Void
+typealias MovieAPITopRatedResponse = (Swift.Result<[MovieRating]?, DataError>) -> Void
 
 protocol MovieAPILogic {
-    func getMovies(completion: @escaping (MovieAPIResponse))
+    func getPopularMovies(completion: @escaping (MovieAPIPopularResponse))
+    func getTopRatedMovies(completion: @escaping (MovieAPITopRatedResponse))
 }
 
 class MovieAPI : MovieAPILogic {
-    func getMovies(completion: @escaping (MovieAPIResponse)) {
+    func getPopularMovies(completion: @escaping (MovieAPIPopularResponse)) {
         URLCache.shared.removeAllCachedResponses()
-        print(Constants.URL.requestURL)
-        AF.request(Constants.URL.requestURL,
+        AF.request(Constants.URL.popular,
                    method: .get,
                    encoding: URLEncoding.default)
         .validate()
@@ -28,6 +29,23 @@ class MovieAPI : MovieAPILogic {
                 completion(.failure(.networkingError(error.localizedDescription)))
             case .success(let movieListResult):
                 completion(.success(movieListResult.movies))
+            }
+        }
+    }
+    
+    func getTopRatedMovies(completion: @escaping (MovieAPITopRatedResponse)) {
+        URLCache.shared.removeAllCachedResponses()
+        print(Constants.URL.topRated)
+        AF.request(Constants.URL.topRated,
+                   method: .get,
+                   encoding: URLEncoding.default)
+        .validate()
+        .responseDecodable(of: TopRatedMovieRootResult.self ) { response in
+            switch response.result {
+            case .failure(let error):
+                completion(.failure(.networkingError(error.localizedDescription)))
+            case .success(let movieListResult):
+                completion(.success(movieListResult.topRatedMovies))
             }
         }
     }

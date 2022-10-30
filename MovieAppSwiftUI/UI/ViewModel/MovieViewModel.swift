@@ -9,7 +9,8 @@ import Foundation
 import Combine
 
 class MovieViewModel : ObservableObject {
-    @Published private(set) var movies: [Movie] = []
+    @Published private(set) var popularMovies: [Movie] = []
+    @Published private(set) var topRatedMovies: [MovieRating] = []
     @Published private(set) var error: DataError? = nil
     
     private let apiService: MovieAPILogic
@@ -18,12 +19,22 @@ class MovieViewModel : ObservableObject {
         self.apiService = apiService
     }
     
-    func getMovies() {
-        print("Getting movies")
-        apiService.getMovies() { [weak self] result in
+    func getPopularMovies() {
+        apiService.getPopularMovies() { [weak self] result in
             switch result {
-            case .success(let movies):
-                self?.movies = movies ?? []
+            case .success(let popularMovies):
+                self?.popularMovies = popularMovies ?? []
+            case .failure(let error):
+                self?.error = error
+            }
+        }
+    }
+    
+    func getTopRatedMovies() {
+        apiService.getTopRatedMovies { [weak self] result in
+            switch result {
+            case .success(let topRatedMovies):
+                self?.topRatedMovies = topRatedMovies ?? []
             case .failure(let error):
                 self?.error = error
             }
